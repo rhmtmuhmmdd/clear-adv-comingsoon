@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLEAR.ADV — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --green: #4a7c59;
+      --green-light: #6aab7e;
+      --green-glow: rgba(74,124,89,0.55);
+      --white: #FAFAFA;
+      --overlay: rgba(10,18,12,0.62);
+      --bg-card: rgba(10,18,12,0.45);
+      --text-main: #FAFAFA;
+      --text-sub: rgba(250,250,250,0.82);
+      --footer-bg: rgba(6,14,8,0.72);
+      --toggle-bg: rgba(255,255,255,0.12);
+      --toggle-icon: #FAFAFA;
+      --transition: 0.45s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="light"] {
+      --overlay: rgba(235,241,228,0.72);
+      --bg-card: rgba(235,241,228,0.55);
+      --text-main: #1a2a1e;
+      --text-sub: rgba(26,42,30,0.80);
+      --footer-bg: rgba(220,232,212,0.82);
+      --toggle-bg: rgba(0,0,0,0.10);
+      --toggle-icon: #1a2a1e;
+      --green: #3d6b49;
+      --green-glow: rgba(61,107,73,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND ── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url('sampul1.jpg') center/cover no-repeat;
+      transition: var(--transition);
+    }
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--overlay);
+      transition: var(--transition);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 36px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .logo-wrap img {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45));
+      transition: transform 0.3s;
+    }
+    .logo-wrap img:hover { transform: scale(1.04); }
+
+    /* Fallback text logo if image missing */
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.08em;
+      color: var(--text-main);
+      transition: var(--transition);
+      display: none;
+    }
+    .logo-wrap img.error + .logo-text { display: block; }
+
+    /* ── TOGGLE ── */
+    .toggle-btn {
+      background: var(--toggle-bg);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--toggle-icon);
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+    }
+    .toggle-btn:hover {
+      background: rgba(255,255,255,0.18);
+      transform: scale(1.03);
+    }
+    .toggle-btn svg { width: 18px; height: 18px; transition: var(--transition); }
+
+    /* ── HERO ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+
+    .main-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 7.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      max-width: 920px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      transition: var(--transition);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.45s forwards;
+    }
+    .main-title .accent {
+      color: var(--green-light);
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.88em;
+    }
+
+    .subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      margin-top: 16px;
+      max-width: 600px;
+      transition: var(--transition);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    .tagline {
+      font-size: clamp(0.82rem, 1.5vw, 0.95rem);
+      color: var(--text-sub);
+      margin-top: 10px;
+      font-style: italic;
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown-wrap {
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+    .countdown {
+      display: flex;
+      gap: clamp(12px, 3vw, 32px);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cd-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 18px 24px 14px;
+      min-width: 80px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: var(--transition);
+    }
+    .cd-block:hover { transform: translateY(-4px); border-color: var(--green); }
+    .cd-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      color: var(--text-main);
+      line-height: 1;
+      transition: var(--transition);
+    }
+    .cd-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      margin-top: 6px;
+      transition: var(--transition);
+    }
+    .countdown-note {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      font-weight: 300;
+      max-width: 420px;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+    #days-note {
+      color: var(--green-light);
+      font-weight: 500;
+    }
+
+    /* ── CTA ── */
+    .cta-wrap {
+      margin-top: 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      animation: fadeUp 0.9s 1.2s forwards;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.28s, box-shadow 0.28s, background 0.28s;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(74,124,89,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--green-light);
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 8px 36px var(--green-glow), 0 0 0 4px rgba(106,171,126,0.15);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1.5px solid rgba(250,250,250,0.35);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-3px) scale(1.02);
+      border-color: var(--green-light);
+    }
+    .cta-note {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      font-weight: 300;
+      font-style: italic;
+      max-width: 380px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--footer-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 28px 36px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      transition: var(--transition);
+    }
+    .footer-tagline {
+      color: var(--text-sub);
+      font-size: 0.82rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      margin-bottom: 18px;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .social-btn:hover {
+      transform: translateY(-4px);
+    }
+    .social-btn.instagram {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(220,39,67,0.28);
+    }
+    .social-btn.instagram:hover { box-shadow: 0 8px 28px rgba(220,39,67,0.5); }
+    .social-btn.tiktok {
+      background: #010101;
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .social-btn.tiktok:hover { box-shadow: 0 8px 28px rgba(105,201,208,0.4); }
+    .social-btn.facebook {
+      background: #1877f2;
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(24,119,242,0.3);
+    }
+    .social-btn.facebook:hover { box-shadow: 0 8px 28px rgba(24,119,242,0.55); }
+    .social-btn svg { width: 16px; height: 16px; }
+
+    .footer-copy {
+      margin-top: 18px;
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      opacity: 0.55;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: var(--green);
+      margin: 18px auto 0;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.9s forwards;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .logo-wrap img { height: 40px; }
+      .hero { padding: 28px 18px 20px; }
+      .cd-block { padding: 14px 18px 10px; min-width: 64px; }
+      .btn { padding: 12px 22px; font-size: 0.82rem; }
+      footer { padding: 22px 20px; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <div class="page">
+    <!-- HEADER -->
+    <header>
+      <a href="#" class="logo-wrap" aria-label="CLEAR.ADV">
+        <img src="logo.png" alt="CLEAR.ADV Logo" onerror="this.classList.add('error'); this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <span class="logo-text">CLEAR.ADV</span>
+      </a>
+
+      <button class="toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span id="toggle-label">Light</span>
+      </button>
+    </header>
+
+    <!-- HERO -->
+    <main class="hero">
+      <span class="badge">🌿 Adventure Begins April 2026</span>
+
+      <h1 class="main-title">
+        CLEAR.ADV<br/>
+        <span class="accent">is Coming Soon</span>
+      </h1>
+
+      <p class="subtitle">Adventure · Responsibility · Togetherness</p>
+      <p class="tagline">Follow us to be the first to join our expeditions this April!</p>
+
+      <div class="divider"></div>
+
+      <!-- COUNTDOWN -->
+      <div class="countdown-wrap">
+        <div class="countdown">
+          <div class="cd-block">
+            <span class="cd-num" id="cd-days">00</span>
+            <span class="cd-label">Days</span>
+          </div>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-hours">00</span>
+            <span class="cd-label">Hours</span>
+          </div>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-minutes">00</span>
+            <span class="cd-label">Minutes</span>
+          </div>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-seconds">00</span>
+            <span class="cd-label">Seconds</span>
+          </div>
+        </div>
+        <p class="countdown-note">
+          Only <span id="days-note">—</span> days left until our first adventure begins.<br/>
+          Don't miss it — follow us now!
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrap">
+        <div class="cta-buttons">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Follow Us
+          </a>
+          <a href="https://www.tiktok.com/" target="_blank" rel="noopener" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.02-8.43a8.21 8.21 0 0 0 4.81 1.55V5.02a4.85 4.85 0 0 1-1.02-.33z"/></svg>
+            TikTok
+          </a>
+        </div>
+        <p class="cta-note">Follow now to receive exclusive updates and sneak peeks before our official launch.</p>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <p class="footer-tagline">Connect with us and join our early adventure crew! 🌲</p>
+      <div class="social-links">
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="social-btn instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.tiktok.com/" target="_blank" rel="noopener" class="social-btn tiktok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.02-8.43a8.21 8.21 0 0 0 4.81 1.55V5.02a4.85 4.85 0 0 1-1.02-.33z"/></svg>
+          TikTok
+        </a>
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="social-btn facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          Facebook
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 CLEAR.ADV — All rights reserved</p>
+    </footer>
+  </div>
+
+  <script>
+    // ── Theme Toggle ──
+    const html = document.documentElement;
+    const iconSun = document.getElementById('icon-sun');
+    const iconMoon = document.getElementById('icon-moon');
+    const label = document.getElementById('toggle-label');
+
+    function toggleTheme() {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      iconSun.style.display  = isDark ? 'block' : 'none';
+      iconMoon.style.display = isDark ? 'none'  : 'block';
+      label.textContent      = isDark ? 'Dark'  : 'Light';
+    }
+
+    // ── Countdown Timer ──
+    const LAUNCH = new Date('2026-04-01T00:00:00');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const now  = new Date();
+      const diff = LAUNCH - now;
+
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent    = '00';
+        document.getElementById('cd-hours').textContent   = '00';
+        document.getElementById('cd-minutes').textContent = '00';
+        document.getElementById('cd-seconds').textContent = '00';
+        document.getElementById('days-note').textContent  = '0';
+        return;
+      }
+
+      const days  = Math.floor(diff / 864e5);
+      const hours = Math.floor((diff % 864e5) / 36e5);
+      const mins  = Math.floor((diff % 36e5)  / 6e4);
+      const secs  = Math.floor((diff % 6e4)   / 1e3);
+
+      document.getElementById('cd-days').textContent    = pad(days);
+      document.getElementById('cd-hours').textContent   = pad(hours);
+      document.getElementById('cd-minutes').textContent = pad(mins);
+      document.getElementById('cd-seconds').textContent = pad(secs);
+      document.getElementById('days-note').textContent  = days;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
